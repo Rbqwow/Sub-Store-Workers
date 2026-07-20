@@ -3,8 +3,9 @@
 
 name = "sub-store"
 main = "src/workers.js"
-compatibility_date = "2025-11-17"
+compatibility_date = "2026-06-26"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = false
 
 # 环境变量
 [vars]
@@ -39,3 +40,21 @@ name = "LOGIN_LIMITER"
 namespace_id = "1001"
 # 每分钟最多 5 次登录尝试
 simple = { limit = 5, period = 60 }
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+persist = true
+head_sampling_rate = 1
+
+[placement]
+mode = "smart"
