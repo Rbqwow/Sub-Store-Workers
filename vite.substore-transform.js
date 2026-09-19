@@ -130,6 +130,7 @@ export default function getParser() {
             contents = replaceEvalRequire(contents, '@maxmind/geoip2-node', '({ Reader: { openBuffer: () => ({ country: () => null, asn: () => null }) } })');
             contents = replaceEvalRequire(contents, 'stream/promises', 'globalThis.__stream_promises_shim__');
             contents = replaceDirectRequire(contents, 'fs', 'globalThis.__fs_shim__');
+            contents = replaceDirectRequire(contents, 'path', 'globalThis.__path_shim__');
 
             contents = contents.replace(/const\s+isNode\s*=\s*eval\s*\(\s*`typeof\s+process\s*!==\s*"undefined"`\s*\)/g, 'const isNode = false');
             contents = contents.replace(/const\s+isSurge\s*=\s*typeof\s+\$httpClient\s*!==\s*['"]undefined['"]\s*(?:&&\s*![A-Za-z_$][\w$]*\s*)+;/g, 'const isSurge = true;');
