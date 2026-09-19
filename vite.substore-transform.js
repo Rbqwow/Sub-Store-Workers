@@ -66,7 +66,7 @@ export function subStoreTransformPlugin() {
     function replaceDirectRequire(contents, moduleName, replacement) {
         const escaped = moduleName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\//g, '\\/');
         return contents.replace(
-            new RegExp(`(?<!['"\`])\\brequire\\s*\\(\\s*['"\`]${escaped}['"\`]\\s*\\)`, 'g'),
+            new RegExp(`(?<!['"\`\\w.$])\\brequire\\s*\\(\\s*['"\`]${escaped}['"\`]\\s*\\)`, 'g'),
             replacement,
         );
     }
