@@ -51,16 +51,21 @@ export function subStoreTransformPlugin() {
     const dangerousRequirePatterns = dangerousRequireNames.flatMap((name) => {
         const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\//g, '\\/');
         return [
-            new RegExp(`eval\\s*\\(\\s*['\"\`]require\\s*\\(\\s*['\"\`]${escaped}['\"\`]\\s*\\)['\"\`]\\s*,?\\s*\\)`),
-            new RegExp(`(?<!['\"\`])\\brequire\\s*\\(\\s*['\"\`]${escaped}['\"\`]\\s*\\)`),
+            new RegExp(`eval\\s*\\(\\s*['\"\`]require\\s*\\(\\s*['\"\`](?:node:)?${escaped}['\"\`]\\s*\\)['\"\`]\\s*,?\\s*\\)`),
+            new RegExp(`(?<!['\"\`])\\brequire\\s*\\(\\s*['\"\`](?:node:)?${escaped}['\"\`]\\s*\\)`),
         ];
     });
     function replaceEvalRequire(contents, moduleName, replacement) {
         const escaped = moduleName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\//g, '\\/');
-        return contents.replace(
-            new RegExp(`eval\\s*\\(\\s*['\"\`]require\\s*\\(\\s*['\"\`]${escaped}['\"\`]\\s*\\)['\"\`]\\s*,?\\s*\\)`, 'g'),
-            replacement,
-        );
+        return contents
+            .replace(
+                new RegExp(`eval\\s*\\(\\s*['\"\`]require\\s*\\(\\s*['\"\`](?:node:)?${escaped}['\"\`]\\s*\\)['\"\`]\\s*,?\\s*\\)`, 'g'),
+                replacement,
+            )
+            .replace(
+                new RegExp(`(?<!['\"\`])\\brequire\\s*\\(\\s*['\"\`](?:node:)?${escaped}['\"\`]\\s*\\)`, 'g'),
+                replacement,
+            );
     }
 
     function assertNoDangerousRequireResidue(contents, id, pluginContext) {
